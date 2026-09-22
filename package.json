@@ -1,0 +1,80 @@
+{
+  "name": "stock-portfolio-showcase",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22 <23"
+  },
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "clean:generated-types": "node -e \"require('node:fs').rmSync('.next/types', { recursive: true, force: true })\"",
+    "dev": "NEXT_PUBLIC_PORTFOLIO_TARGET=demo NEXT_PUBLIC_PORTFOLIO_EXPERIENCE=research next dev",
+    "start": "npm run start:demo",
+    "verify": "npm run public:check && npm run typecheck && npm run test && npm run test:release && npm run eval:buffett && npm run build:domain",
+    "prebuild": "npm run verify",
+    "build": "node scripts/build-target.mjs demo",
+    "build:next": "npm run build:demo",
+    "build:domain": "npm run clean && tsc -p tsconfig.build.json",
+    "db:generate": "drizzle-kit generate",
+    "typecheck": "npm run clean:generated-types && tsc --noEmit",
+    "test": "NODE_ENV=test vitest run",
+    "test:watch": "NODE_ENV=test vitest",
+    "test:e2e": "playwright test",
+    "eval:buffett": "NODE_ENV=test vitest run tests/buffett-research-eval.test.ts",
+    "audit:prod": "npm audit --omit=dev --audit-level=high",
+    "bundle:check": "node scripts/client-bundle-audit.mjs",
+    "public:check": "node scripts/public-snapshot-audit.mjs",
+    "check": "npm run build",
+    "build:provider": "node scripts/build-target.mjs provider",
+    "build:sites": "node scripts/build-target.mjs sites",
+    "build:demo": "node scripts/build-target.mjs demo",
+    "build:ci": "node scripts/build-ci.mjs",
+    "smoke:built": "node scripts/smoke-built-targets.mjs",
+    "release:check": "node scripts/release-preflight.mjs",
+    "start:demo": "NEXT_PUBLIC_PORTFOLIO_TARGET=demo next start",
+    "test:release": "node --test scripts/tests/*.test.mjs"
+  },
+  "dependencies": {
+    "decimal.js": "10.6.0",
+    "drizzle-orm": "0.45.2",
+    "next": "^16.3.5",
+    "pdfjs-dist": "5.4.296",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-server-dom-webpack": "^19.2.8",
+    "react-icons": "^5.7.0",
+    "recharts": "3.10.1"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "1.54.8",
+    "@openai/sites-vite-plugin": "0.2.0",
+    "@playwright/test": "^1.62.1",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "6.1.0",
+    "@vitejs/plugin-rsc": "0.5.34",
+    "drizzle-kit": "0.31.10",
+    "fake-indexeddb": "6.2.5",
+    "fast-check": "4.9.0",
+    "jsdom": "^30.0.1",
+    "typescript": "7.0.2",
+    "vinext": "1.0.0-beta.8",
+    "vite": "8.2.2",
+    "vitest": "4.1.11",
+    "wrangler": "4.131.1"
+  },
+  "overrides": {
+    "@esbuild-kit/core-utils": {
+      "esbuild": "0.25.12"
+    },
+    "nanoid": "3.3.18",
+    "next": {
+      "postcss": "8.5.25",
+      "sharp": "0.35.4"
+    }
+  }
+}

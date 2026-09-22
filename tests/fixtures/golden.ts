@@ -1,0 +1,82 @@
+import {
+  CALCULATION_VERSION,
+  FX_CALCULATION_VERSION,
+} from "../../domain/version.ts";
+
+export const goldenFixture = {
+  schemaVersion: "domain-fixture-v1",
+  calculationVersion: CALCULATION_VERSION,
+  fxCalculationVersion: FX_CALCULATION_VERSION,
+  cases: {
+    G001: {
+      quantity: "10",
+      unitPrice: "100",
+      fee: "1",
+      valuationPrice: "120",
+      expectedOpenCost: "1001",
+      expectedAverageCost: "100.1",
+      expectedMarketValue: "1200",
+      expectedUnrealizedPnl: "199",
+    },
+    G002: {
+      brokerA: { quantity: "10", unitPrice: "100", fee: "1" },
+      brokerB: { quantity: "5", unitPrice: "120", fee: "2" },
+      valuationPrice: "130",
+      expectedQuantity: "15",
+      expectedOpenCost: "1603",
+      expectedMarketValue: "1950",
+      expectedUnrealizedPnl: "347",
+    },
+    G003: {
+      quantity: "0.125",
+      unitPrice: "200",
+      fee: "0.10",
+      valuationPrice: "212.40",
+      expectedOpenCost: "25.1",
+      expectedAverageCost: "200.8",
+      expectedMarketValue: "26.55",
+      expectedUnrealizedPnl: "1.45",
+    },
+    G004: {
+      quantity: "11",
+      valuationPrice: "108",
+      previousRegularClose: "100",
+      expectedEstimatedDailyPriceEffect: "88",
+    },
+    G005: {
+      price: "130",
+      sourceEventAt: "2026-07-29T14:45:00Z",
+      fetchedAt: "2026-07-29T14:45:30Z",
+      failedAt: "2026-07-29T15:01:00Z",
+    },
+    G007: {
+      openingQuantity: "20",
+      openingCost: "2200",
+      sellQuantity: "5",
+      expectedQuantity: "15",
+      expectedOpenCost: "1650",
+      expectedAverageCost: "110",
+    },
+    G008: {
+      initialQuantity: "12",
+      initialCost: "1260",
+      reconciledQuantity: "10",
+      reconciledCost: "1080",
+      buyQuantity: "2",
+      buyUnitPrice: "120",
+      expectedQuantity: "12",
+      expectedOpenCost: "1320",
+      expectedAverageCost: "110",
+    },
+    G009: {
+      quantity: "15",
+      reportedAverageCost: "106.86666667",
+      expectedOpenCost: "1603.00000005",
+    },
+    G010: {
+      usdAmount: "1950",
+      usdCnyRate: "7.20000000",
+      expectedCnyAmount: "14040",
+    },
+  },
+} as const;

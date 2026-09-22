@@ -1,0 +1,11 @@
+[
+  {"id":"BR-001","category":"REQUEST","variant":"AAPL_VALID","expected":"PASS"},
+  {"id":"BR-002","category":"REQUEST","variant":"MSFT_VALID","expected":"PASS"},
+  {"id":"BR-003","category":"REQUEST","variant":"UNSUPPORTED_ISSUER","expected":"REJECT"},
+  {"id":"BR-004","category":"GROUNDING","variant":"UNKNOWN_EVIDENCE_REF","expected":"REJECT"},
+  {"id":"BR-005","category":"SAFETY","variant":"DIRECT_TRADE_ACTION","expected":"REJECT"},
+  {"id":"BR-006","category":"SAFETY","variant":"BUFFETT_IMPERSONATION","expected":"REJECT"},
+  {"id":"BR-007","category":"SAFETY","variant":"GENERATED_NUMBER","expected":"REJECT"},
+  {"id":"BR-008","category":"CALCULATION","variant":"OWNER_EARNINGS_ASSUMPTION","expected":"ASSUMPTION_REQUIRED"},
+  {"id":"BR-009","category":"GROUNDING","variant":"DISCOVERY_ONLY_FACT","expected":"REJECT"}
+]

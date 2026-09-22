@@ -1,0 +1,1490 @@
+/*
+ * Portfolio visual system · September 2026.
+ *
+ * Imported after portfolio-premium.css. Product structure and interaction
+ * contracts stay unchanged. Black asset overview, white ledger, shared form tokens.
+ */
+
+:root[data-experience="production"] {
+  --ledger-canvas: #e9eaed;
+  --ledger-page: #f5f5f7;
+  --ledger-surface: #ffffff;
+  --ledger-surface-muted: #f0f1f3;
+  --ledger-hero: #050506;
+  --ledger-hero-line: rgb(244 246 250 / 10%);
+  --ledger-ink: #111217;
+  --ledger-muted: #626670;
+  --ledger-muted-dark: #979aa3;
+  --ledger-line: #e7e8ec;
+  --ledger-line-strong: #d5d8de;
+  --ledger-accent: #396fc2;
+  --ledger-accent-soft: #edf3fc;
+  --ledger-gain: #bd3043;
+  --ledger-gain-dark: #ff7889;
+  --ledger-loss: #08785b;
+  --ledger-loss-dark: #3acb98;
+  --ledger-focus: rgb(57 111 194 / 82%);
+}
+
+html[data-experience="production"] {
+  background: var(--ledger-canvas);
+}
+
+:where(html[data-experience="production"]) body:has(.portfolio-account) {
+  min-height: 100dvh;
+  margin: 0;
+  background: var(--ledger-canvas);
+  color: var(--ledger-ink);
+}
+
+:where(html[data-experience="production"]) .portfolio-account {
+  --portfolio-horizontal-pad: clamp(18px, 5.1vw, 24px);
+  --portfolio-page-bg: var(--ledger-page);
+  --portfolio-surface: var(--ledger-surface);
+  --portfolio-ink: var(--ledger-ink);
+  --portfolio-muted: var(--ledger-muted);
+  --portfolio-line: var(--ledger-line);
+  --portfolio-gain: var(--ledger-gain);
+  --portfolio-gain-on-dark: var(--ledger-gain-dark);
+  --portfolio-loss: var(--ledger-loss);
+  --portfolio-loss-on-dark: var(--ledger-loss-dark);
+  --portfolio-chart-gain: var(--ledger-gain-dark);
+  --portfolio-chart-loss: var(--ledger-loss-dark);
+  --portfolio-chart-neutral: #d4d7dd;
+  --portfolio-chart-grid: rgb(244 246 250 / 11%);
+  --portfolio-chart-cursor: rgb(244 246 250 / 55%);
+  position: relative;
+  width: min(100%, 60rem);
+  min-height: 100dvh;
+  padding-top: 0;
+  padding-bottom: calc(6.5rem + env(safe-area-inset-bottom));
+  margin-inline: auto;
+  overflow-x: clip;
+  background: var(--ledger-page);
+  color: var(--ledger-ink);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+    "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .numeric {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Continuous portfolio hero */
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-header,
+:where(html[data-experience="production"]) .portfolio-account .account-summary {
+  border: 0;
+  background: var(--ledger-hero);
+  background-image: none;
+  color: #f6f7f9;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-header {
+  min-height: 4.25rem;
+  align-items: center;
+  padding:
+    max(0.4rem, env(safe-area-inset-top))
+    var(--portfolio-horizontal-pad)
+    0.4rem;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-header::before,
+:where(html[data-experience="production"]) .portfolio-account .portfolio-header::after,
+:where(html[data-experience="production"]) .portfolio-account .account-summary::before,
+:where(html[data-experience="production"]) .portfolio-account .account-summary::after,
+:where(html[data-experience="production"]) .portfolio-account .portfolio-header h1::after {
+  display: none;
+  content: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-header h1 {
+  margin: 0;
+  color: #f7f8fa;
+  font-size: 1.25rem;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-header__controls {
+  max-width: 100%;
+  flex-wrap: wrap;
+  gap: 0.42rem;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .currency-mode-switch,
+:where(html[data-experience="production"]) .portfolio-account .portfolio-more-button {
+  border: 1px solid var(--ledger-hero-line);
+  background: #0e0f13;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .currency-mode-switch {
+  min-height: 3rem;
+  padding: 0.18rem;
+  border-radius: 0.8rem;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .currency-mode-switch button {
+  min-width: 3.15rem;
+  min-height: 44px;
+  padding-inline: 0.55rem;
+  border: 0;
+  border-radius: 0.68rem;
+  color: #a3a6ae;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    transform 150ms ease;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .currency-mode-switch button[aria-pressed="true"] {
+  background: #f4f5f7;
+  color: #17191e;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 7%);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .currency-mode-switch button:active {
+  transform: scale(0.98);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-more-button {
+  min-width: 3.15rem;
+  min-height: 3rem;
+  padding-inline: 0.7rem;
+  border-radius: 0.8rem;
+  color: #f1f2f5;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    transform 150ms ease;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-more-button:hover,
+:where(html[data-experience="production"]) .portfolio-account .portfolio-more-button[aria-expanded="true"] {
+  border-color: rgb(244 246 250 / 20%);
+  background: #1b1d23;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-more-button:active {
+  transform: scale(0.98);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .fx-rate-status {
+  padding: 0.58rem var(--portfolio-horizontal-pad);
+  border: 0;
+  border-top: 1px solid var(--ledger-hero-line);
+  background: #111723;
+  color: #bacbed;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary {
+  overflow: hidden;
+  padding: 0 0 0.15rem;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__primary {
+  padding: 0.65rem var(--portfolio-horizontal-pad) 0;
+  border: 0;
+  background: transparent;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__label {
+  color: var(--ledger-muted-dark);
+  font-size: 0.875rem;
+  font-weight: 560;
+  letter-spacing: 0.01em;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__label-row > span {
+  display: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__value {
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 0.4rem;
+  overflow: visible;
+  background: none;
+  color: #f8f9fb;
+  filter: none;
+  font-size: clamp(2rem, 13.2vw, 3.5rem);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__headline-change {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 1.6rem;
+  align-items: center;
+  padding: 0;
+  margin-top: 0.48rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  gap: 0.46rem;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__headline-change strong,
+:where(html[data-experience="production"]) .portfolio-account .account-summary__headline-change span {
+  font-size: 0.9375rem;
+  font-weight: 560;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__headline-change small {
+  white-space: nowrap;
+  color: #8f929b;
+  font-size: 0.8125rem;
+  font-weight: 560;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__pnl--positive {
+  color: var(--ledger-gain-dark);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__pnl--negative {
+  color: var(--ledger-loss-dark);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__pnl--neutral {
+  color: #adb0b7;
+}
+
+/* Trend and metric plane */
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-trend,
+:where(html[data-experience="production"]) .portfolio-account .portfolio-trend__plot {
+  min-height: 6.75rem;
+  height: 6.75rem;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-trend {
+  padding-top: 0.08rem;
+  background: transparent;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-trend__readout {
+  color: #9497a0;
+  inset: 0.42rem var(--portfolio-horizontal-pad) auto;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-trend__readout > span,
+:where(html[data-experience="production"]) .portfolio-account .portfolio-trend__readout small,
+:where(html[data-experience="production"]) .portfolio-account .portfolio-trend__overnight-note {
+  color: #9497a0;
+  font-size: 0.75rem;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-trend__readout > strong {
+  color: #eef0f3;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-trend__plot {
+  width: calc(100% - (var(--portfolio-horizontal-pad) * 2));
+  margin-inline: var(--portfolio-horizontal-pad);
+  filter: none;
+  outline: 0;
+  touch-action: pan-y;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-trend__plot:focus-visible {
+  border-radius: 0.7rem;
+  outline: 2px solid #7ba4e0;
+  outline-offset: 0.12rem;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-trend--empty,
+:where(html[data-experience="production"]) .portfolio-account .portfolio-trend--loading {
+  min-height: 6.75rem;
+  height: auto;
+  justify-content: flex-end;
+  padding: 1.05rem var(--portfolio-horizontal-pad) 0.4rem;
+  color: #92959e;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-trend--empty strong {
+  color: #f0f1f4;
+  font-size: 0.86rem;
+  font-weight: 650;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-trend--empty span {
+  max-width: 28rem;
+  margin-top: 0.32rem;
+  color: #92959e;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-trend__skeleton,
+:where(html[data-experience="production"]) .portfolio-account .account-summary--skeleton .skeleton,
+:where(html[data-experience="production"]) .portfolio-account .portfolio-header--skeleton .skeleton {
+  border: 0;
+  background:
+    linear-gradient(90deg, transparent, rgb(255 255 255 / 7%), transparent),
+    rgb(255 255 255 / 4%);
+  background-size: 200% 100%, auto;
+  animation: ledger-skeleton 1.7s ease-in-out infinite;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metrics {
+  display: grid;
+  padding: 0.2rem var(--portfolio-horizontal-pad);
+  border: 0;
+  border-top: 1px solid var(--ledger-hero-line);
+  background: transparent;
+  box-shadow: none;
+  gap: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metrics .account-summary__metric,
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metrics .account-summary__metric:nth-child(3n + 1),
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metrics .account-summary__metric:nth-child(2),
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metrics .account-summary__metric:nth-child(3) {
+  min-height: 4.35rem;
+  align-content: center;
+  padding: 0.5rem 0 0.5rem clamp(8px, 4vw, 20px);
+  overflow: visible;
+  border: 0;
+  border-left: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  gap: 0.2rem;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metrics .account-summary__metric:nth-child(odd) {
+  padding-left: 0;
+  padding-right: 8px;
+  border-left: 0;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metrics .account-summary__metric:nth-child(n + 3) {
+  border-top: 1px solid var(--ledger-hero-line);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metric::after {
+  display: none;
+  content: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metrics .account-summary__metric dt,
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metrics .account-summary__metric:nth-child(2) dt,
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metrics .account-summary__metric:nth-child(3) dt,
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metrics .account-summary__metric:nth-child(4) dt {
+  color: #989ba4;
+  font-size: 0.8125rem;
+  font-weight: 560;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metric-value strong,
+:where(html[data-experience="production"]) .portfolio-account .account-summary__daily-pnl strong {
+  overflow: visible;
+  color: inherit;
+  font-size: clamp(0.875rem, 4.3vw, 1.1875rem);
+  font-weight: 550;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metric-value span,
+:where(html[data-experience="production"]) .portfolio-account .account-summary__daily-pnl span {
+  color: #a0a3ab;
+  font-size: 0.75rem;
+  font-weight: 520;
+  line-height: 1.35;
+  opacity: 1;
+  white-space: nowrap;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metric--cost .account-summary__metric-value,
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metric--cash .account-summary__metric-value {
+  color: #f1f2f4;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-status-strip {
+  min-height: 2rem;
+  padding: 0.45rem var(--portfolio-horizontal-pad);
+  border: 0;
+  border-top: 1px solid var(--ledger-hero-line);
+  background: var(--ledger-hero);
+  color: #92959e;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+/* Light account ledger */
+
+:where(html[data-experience="production"]) .portfolio-account .inline-notice {
+  width: auto;
+  padding: 0.7rem var(--portfolio-horizontal-pad);
+  margin: 0;
+  border: 0;
+  border-bottom: 1px solid #d8e2f1;
+  border-radius: 0;
+  background: var(--ledger-accent-soft);
+  box-shadow: none;
+  color: #31527d;
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-ai-entry {
+  display: grid;
+  margin: 0;
+  padding-inline: var(--portfolio-horizontal-pad);
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-bottom: 1px solid var(--ledger-line);
+  border-radius: 0;
+  background: var(--ledger-surface);
+  box-shadow: none;
+  gap: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-ai-entry__button,
+:where(html[data-experience="production"]) .portfolio-account .portfolio-ai-entry__button--chat {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.65rem 0.75rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #252831;
+  box-shadow: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    transform 150ms ease;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-ai-entry__button + .portfolio-ai-entry__button {
+  border-left: 1px solid var(--ledger-line);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-ai-entry__button:hover,
+:where(html[data-experience="production"]) .portfolio-account .portfolio-ai-entry__button--chat:hover {
+  background: var(--ledger-surface-muted);
+  color: #17191f;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-ai-entry__button:active {
+  transform: scale(0.985);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .positions-section {
+  position: relative;
+  width: 100%;
+  padding: 0 0 0.25rem;
+  margin: 0;
+  overflow: hidden;
+  border: 0;
+  border-top: 1px solid var(--ledger-line);
+  border-radius: 0;
+  background: var(--ledger-surface);
+  box-shadow: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .positions-section::before {
+  display: none;
+  content: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .section-heading {
+  position: static;
+  display: flex;
+  width: auto;
+  height: auto;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem var(--portfolio-horizontal-pad) 0.4rem;
+  margin: 0;
+  overflow: visible;
+  border: 0;
+  clip: auto;
+  background: var(--ledger-surface);
+  white-space: normal;
+  gap: 0.7rem;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .section-heading__title {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 0.35rem;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .section-heading h2 {
+  color: var(--ledger-ink);
+  font-size: 1.1875rem;
+  font-weight: 650;
+  letter-spacing: -0.04em;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .section-heading__count {
+  color: #5d616a;
+  font-size: 0.75rem;
+  font-weight: 560;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .section-heading__metric {
+  min-height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #5d616a;
+  font-size: 0.75rem;
+  font-weight: 560;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-table {
+  --position-identity-width: 7rem;
+  --position-table-min-width: 36.5rem;
+  position: relative;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: var(--ledger-surface);
+  box-shadow: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-table__visual-hint {
+  display: flex;
+  min-height: 1.6rem;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 var(--portfolio-horizontal-pad) 0.5rem;
+  border: 0;
+  border-top: 0;
+  border-bottom: 0;
+  background: var(--ledger-surface);
+  color: #646975;
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-table__visual-hint::before,
+:where(html[data-experience="production"]) .portfolio-account .position-table__visual-hint::after {
+  display: none;
+  content: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-table::after {
+  position: absolute;
+  z-index: 4;
+  top: 1.6rem;
+  right: 0;
+  bottom: 0;
+  width: 0.8rem;
+  background: linear-gradient(90deg, transparent, rgb(252 252 253 / 88%));
+  content: "";
+  pointer-events: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-table__scroller {
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  outline-offset: -3px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-table__scroller::-webkit-scrollbar {
+  display: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-table__header,
+:where(html[data-experience="production"]) .portfolio-account .position-row {
+  min-width: var(--position-table-min-width);
+  padding-right: 0;
+  padding-left: 0;
+  column-gap: 0.35rem;
+  grid-template-columns:
+    var(--position-identity-width)
+    repeat(4, minmax(6.5rem, 1fr));
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-table__header {
+  min-height: 2.55rem;
+  padding-block: 0.54rem;
+  border: 0;
+  border-bottom: 1px solid var(--ledger-line);
+  background: #f8f9fa;
+  color: #666a73;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-table__header > span {
+  padding-inline: 0.68rem;
+  text-align: right;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-table__header > span:first-child {
+  position: sticky;
+  z-index: 8;
+  left: 0;
+  padding-left: var(--portfolio-horizontal-pad);
+  background: #f8f9fa;
+  box-shadow:
+    1px 0 0 var(--ledger-line),
+    0.5rem 0 0.85rem -0.8rem rgb(17 18 23 / 28%);
+  text-align: left;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-list {
+  background: var(--ledger-surface);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-row {
+  --position-row-background: var(--ledger-surface);
+  position: relative;
+  min-height: 4.5rem;
+  padding-block: 0.72rem;
+  overflow: visible;
+  border: 0;
+  border-bottom: 1px solid var(--ledger-line);
+  background: var(--position-row-background);
+  box-shadow: none;
+  transition:
+    background-color 150ms ease,
+    transform 150ms ease;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-row::after,
+:where(html[data-experience="production"]) .portfolio-account .position-cell--identity::before {
+  display: none;
+  content: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-row:last-child {
+  border-bottom: 0;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-row:hover {
+  --position-row-background: #f7f8fa;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-row--pressed,
+:where(html[data-experience="production"]) .portfolio-account .position-row:active {
+  --position-row-background: #eff2f6;
+  transform: scale(0.998);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-cell {
+  position: relative;
+  z-index: 2;
+  gap: 0.28rem;
+  padding-inline: 0.68rem;
+  line-height: 1.2;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-cell--identity {
+  position: sticky;
+  z-index: 7;
+  left: 0;
+  align-content: center;
+  padding-left: var(--portfolio-horizontal-pad);
+  background: var(--position-row-background);
+  box-shadow:
+    1px 0 0 var(--ledger-line),
+    0.5rem 0 0.85rem -0.8rem rgb(17 18 23 / 28%);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-cell--identity strong {
+  overflow: hidden;
+  color: var(--ledger-ink);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-cell--identity span,
+:where(html[data-experience="production"]) .portfolio-account .position-cell__secondary {
+  color: #696d76;
+  font-size: 0.8125rem;
+  font-weight: 510;
+  line-height: 1.3;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-cell--numeric {
+  align-content: center;
+  text-align: right;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-cell__primary {
+  color: var(--ledger-ink);
+  font-size: 0.9375rem;
+  font-weight: 560;
+  letter-spacing: -0.014em;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-cell__primary--positive,
+:where(html[data-experience="production"]) .portfolio-account .position-cell__secondary--positive {
+  color: var(--ledger-gain);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-cell__primary--negative,
+:where(html[data-experience="production"]) .portfolio-account .position-cell__secondary--negative {
+  color: var(--ledger-loss);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-cell--daily .position-cell__primary--positive,
+:where(html[data-experience="production"]) .portfolio-account .position-cell--daily .position-cell__primary--negative {
+  display: inline;
+  min-height: auto;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .cash-row,
+:where(html[data-experience="production"]) .portfolio-account .cash-row--empty {
+  --position-row-background: #f8f9fa;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .cash-row:hover,
+:where(html[data-experience="production"]) .portfolio-account .cash-row--empty:hover {
+  --position-row-background: #f1f3f5;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .cash-cell__label {
+  color: #727680;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Disclosures, primary action and sheets */
+
+:where(html[data-experience="production"]) .portfolio-account .page-disclosures {
+  display: grid;
+  width: auto;
+  padding: 1.1rem var(--portfolio-horizontal-pad) 1.75rem;
+  margin: 0;
+  border-top: 1px solid var(--ledger-line);
+  background: var(--ledger-page);
+  color: var(--ledger-muted);
+  gap: 0.7rem;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .page-disclosures .data-note {
+  padding: 0;
+  border: 0;
+  color: var(--ledger-muted);
+  font-size: 0.8125rem;
+  line-height: 1.58;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .page-disclosures a {
+  color: #315d9f;
+  font-weight: 630;
+  text-decoration-color: rgb(49 93 159 / 30%);
+  text-underline-offset: 0.16em;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .bottom-action {
+  position: fixed;
+  z-index: 25;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding:
+    0.68rem
+    max(var(--portfolio-horizontal-pad), env(safe-area-inset-right))
+    max(0.68rem, env(safe-area-inset-bottom))
+    max(var(--portfolio-horizontal-pad), env(safe-area-inset-left));
+  border-top: 1px solid rgb(17 18 23 / 7%);
+  background: rgb(248 249 250 / 90%);
+  box-shadow: none;
+  backdrop-filter: blur(1.35rem) saturate(115%);
+  -webkit-backdrop-filter: blur(1.35rem) saturate(115%);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .bottom-action__inner {
+  width: min(100%, 57rem);
+  margin-inline: auto;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .bottom-action__button {
+  position: relative;
+  min-height: 3.35rem;
+  overflow: visible;
+  border: 0;
+  border-radius: 1rem;
+  background: #111217;
+  box-shadow: 0 0.25rem 0.6rem rgb(17 18 23 / 10%);
+  color: #f8f9fb;
+  font-size: 0.98rem;
+  font-weight: 710;
+  letter-spacing: -0.015em;
+  transition:
+    background-color 150ms ease,
+    transform 150ms ease,
+    box-shadow 150ms ease;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .bottom-action__button::before,
+:where(html[data-experience="production"]) .portfolio-account .bottom-action__button::after {
+  display: none;
+  content: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .bottom-action__button:hover {
+  background: #202228;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .bottom-action__button:active {
+  transform: translateY(1px) scale(0.99);
+  box-shadow: 0 0.25rem 0.75rem rgb(17 18 23 / 14%);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-toast {
+  z-index: 80;
+  min-height: 3rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 0.9rem;
+  background: rgb(17 18 23 / 92%);
+  box-shadow: 0 1rem 2.8rem rgb(0 0 0 / 22%);
+  color: #f6f7f9;
+  backdrop-filter: blur(1rem);
+  -webkit-backdrop-filter: blur(1rem);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-toast__mark {
+  display: inline-grid;
+  width: 1.35rem;
+  height: 1.35rem;
+  place-items: center;
+  border-radius: 50%;
+  background: #f1f3f6;
+  color: #17191f;
+  font-size: 0.8125rem;
+  box-shadow: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .action-sheet-backdrop {
+  z-index: 60;
+  background: rgb(5 6 8 / 42%);
+  backdrop-filter: blur(0.3rem);
+  -webkit-backdrop-filter: blur(0.3rem);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .action-sheet {
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 72%);
+  border-radius: 1.4rem 1.4rem 0 0;
+  background: #f5f5f7;
+  background-image: none;
+  box-shadow: 0 -1rem 3.8rem rgb(0 0 0 / 24%);
+  backdrop-filter: blur(1.4rem) saturate(110%);
+  -webkit-backdrop-filter: blur(1.4rem) saturate(110%);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__heading h2 {
+  color: var(--ledger-ink);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__heading p,
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__description {
+  color: #70747d;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__actions,
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__confirm-actions {
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--ledger-line);
+  border-radius: 0.9rem;
+  background: var(--ledger-surface);
+  box-shadow: 0 0.12rem 0.45rem rgb(17 18 23 / 4%);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__button,
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__cancel {
+  min-height: 3.45rem;
+  border: 0;
+  border-radius: 0;
+  background: var(--ledger-surface);
+  box-shadow: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__button + .action-sheet__button {
+  border-top: 1px solid var(--ledger-line);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__button:hover {
+  border-color: transparent;
+  background: var(--ledger-surface-muted);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__button--chatgpt,
+:where(html[data-experience="production"]) .portfolio-account .portfolio-more-sheet__row--chatgpt {
+  border-color: transparent;
+  background: var(--ledger-accent-soft);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__button--danger {
+  background: #fcf1f2;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__button .portfolio-more-sheet__icon {
+  border: 1px solid var(--ledger-line);
+  background: var(--ledger-surface-muted);
+  color: #4f5561;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__button .portfolio-more-sheet__icon--chatgpt {
+  background: #e5edf8;
+  color: #315d9f;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-more-sheet__chevron {
+  color: #9a9ea7;
+}
+
+/* Empty, loading and error states */
+
+:where(html[data-experience="production"]) .portfolio-account.app-shell--empty,
+:where(html[data-experience="production"]) .portfolio-account.app-shell--centered {
+  background: var(--ledger-hero);
+  background-image: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .empty-account,
+:where(html[data-experience="production"]) .portfolio-account .state-card.account-error {
+  width: auto;
+  margin: 1.35rem var(--portfolio-horizontal-pad);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #eff1f4;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .empty-account__eyebrow,
+:where(html[data-experience="production"]) .portfolio-account .empty-account__meta,
+:where(html[data-experience="production"]) .portfolio-account .state-card.account-error .eyebrow {
+  color: #9498a1;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .empty-account h2,
+:where(html[data-experience="production"]) .portfolio-account .state-card.account-error h1 {
+  color: #f8f9fb;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .empty-account p,
+:where(html[data-experience="production"]) .portfolio-account .state-card.account-error p {
+  color: #a5a9b2;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .empty-account .button--secondary,
+:where(html[data-experience="production"]) .portfolio-account .state-card.account-error .button--primary {
+  border-color: rgb(255 255 255 / 14%);
+  background: #f5f6f8;
+  color: #17191f;
+}
+
+/* Focus, fallbacks and responsive behavior */
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-header {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__value {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metric-value strong,
+:where(html[data-experience="production"]) .portfolio-account .account-summary__metric-value span {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-ai-entry__button {
+  display: flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding-inline: 8px;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-ai-entry__button svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: #626873;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .bottom-action__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .bottom-action__button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .section-heading__title {
+  flex-wrap: wrap;
+  gap: 0.3rem 0.55rem;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .section-heading__count {
+  font-weight: 450;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-table__header > span:first-child,
+:where(html[data-experience="production"]) .portfolio-account .position-cell--identity {
+  box-shadow: 0.4rem 0 0.7rem -0.55rem rgb(17 18 23 / 24%);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-row {
+  transition: background-color 150ms ease;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .position-row:active,
+:where(html[data-experience="production"]) .portfolio-account .position-row--pressed {
+  transform: none;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__button .portfolio-more-sheet__icon {
+  border: 0;
+  border-radius: 0.65rem;
+  background: #f0f1f4;
+  color: #454b57;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-more-sheet__row strong,
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__button strong {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-more-sheet__row span,
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__button > span,
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__heading p {
+  font-weight: 450;
+  line-height: 1.5;
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-more-sheet .action-sheet__cancel,
+:where(html[data-experience="production"]) .portfolio-account .action-sheet__cancel {
+  margin-top: 0.75rem;
+  border-radius: 0.9rem;
+  color: var(--ledger-ink);
+  font-weight: 600;
+}
+
+/* Entry, calibration, recovery and conversation share the account typography. */
+:where(html[data-experience="production"]) body:has(.precision-form) {
+  background: var(--ledger-canvas);
+}
+
+:where(html[data-experience="production"]) .precision-form {
+  --qt-canvas: var(--ledger-page);
+  --qt-ink: var(--ledger-ink);
+  --qt-ink-secondary: var(--ledger-muted);
+  --qt-ink-tertiary: #646974;
+  --qt-line: var(--ledger-line);
+  --qt-line-strong: var(--ledger-line-strong);
+  --qt-cobalt: var(--ledger-accent);
+  --qt-cobalt-strong: #2e5d9f;
+  --qt-graphite: var(--ledger-hero);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+:where(html[data-experience="production"]) .precision-form.app-shell--form {
+  padding-inline: max(1rem, env(safe-area-inset-left));
+}
+
+:where(html[data-experience="production"]) .precision-form .form-header {
+  margin-bottom: 1.25rem;
+  border: 0;
+}
+
+:where(html[data-experience="production"]) .precision-form .form-header h1 {
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+
+:where(html[data-experience="production"]) .precision-form .form-header .eyebrow {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+:where(html[data-experience="production"]) .precision-form .form-section {
+  padding: 1.25rem;
+  border-radius: 1rem;
+  box-shadow: none;
+}
+
+:where(html[data-experience="production"]) .precision-form .form-section__heading > span {
+  border: 1px solid var(--ledger-line);
+  background: #f4f5f7;
+  color: var(--ledger-muted);
+  font-size: 0.8125rem;
+  font-weight: 550;
+}
+
+:where(html[data-experience="production"]) .precision-form .form-section__heading h2 {
+  font-weight: 620;
+}
+
+:where(html[data-experience="production"]) .precision-form .form-section__heading p {
+  font-size: 0.875rem;
+  line-height: 1.65;
+}
+
+:where(html[data-experience="production"]) .precision-form .field label,
+:where(html[data-experience="production"]) .precision-form label.field,
+:where(html[data-experience="production"]) .precision-form .row-mode-fieldset > legend {
+  font-size: 0.875rem;
+  font-weight: 550;
+}
+
+:where(html[data-experience="production"]) .precision-form .field input,
+:where(html[data-experience="production"]) .precision-form .field select {
+  min-height: 3.5rem;
+  border-radius: 0.75rem;
+  background: #fcfcfd;
+  box-shadow: none;
+  font-weight: 450;
+}
+
+:where(html[data-experience="production"]) .precision-form .field-help,
+:where(html[data-experience="production"]) .precision-form .field-error {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+:where(html[data-experience="production"]) .precision-form .preview-card {
+  border: 1px solid #1c1d22;
+  border-radius: 1rem;
+  background: var(--ledger-hero);
+  box-shadow: none;
+}
+
+:where(html[data-experience="production"]) .precision-form .preview-metrics dt,
+:where(html[data-experience="production"]) .precision-form .preview-card__empty,
+:where(html[data-experience="production"]) .precision-form .cash-preview-note {
+  font-size: 0.8125rem;
+  color: #b1b4bc;
+}
+
+:where(html[data-experience="production"]) .precision-form .preview-metrics dd {
+  font-size: 1rem;
+  font-weight: 550;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+:where(html[data-experience="production"]) .precision-form .form-actions {
+  border-radius: 1rem;
+  box-shadow: 0 0.3rem 1rem rgb(17 18 23 / 7%);
+}
+
+:where(html[data-experience="production"]) .portfolio-account .portfolio-ai-chat-dialog {
+  border-color: var(--ledger-line);
+  background: var(--ledger-surface);
+  color: var(--ledger-ink);
+}
+
+:where(html[data-experience="production"]) .portfolio-ai-chat-dialog__header {
+  border-color: var(--ledger-line);
+  background: var(--ledger-surface);
+}
+
+:where(html[data-experience="production"]) .portfolio-ai-chat-dialog__header h2 {
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+
+:where(html[data-experience="production"]) .portfolio-ai-chat-dialog__composer textarea {
+  border-color: var(--ledger-line-strong);
+  border-radius: 1rem;
+  background: #f8f9fb;
+  font-size: 1rem;
+}
+
+:where(html[data-experience="production"]) .portfolio-ai-chat-dialog__message--user p {
+  color: var(--ledger-ink);
+}
+
+:where(html[data-experience="production"]) .portfolio-ai-chat-dialog__message p {
+  font-size: 0.9375rem;
+}
+
+:where(html[data-experience="production"]) .portfolio-ai-chat-dialog__message--user {
+  border-color: var(--ledger-line);
+  background: #f1f3f6;
+  color: var(--ledger-ink);
+}
+
+:where(html[data-experience="production"]) .portfolio-account :where(button, a, [role="button"], [role="slider"], [tabindex]):focus-visible {
+  outline: 2px solid var(--ledger-focus);
+  outline-offset: 0.16rem;
+}
+
+:where(html[data-experience="production"]) .portfolio-account :where(button, a, [role="button"]):disabled {
+  cursor: not-allowed;
+}
+
+@supports not ((backdrop-filter: blur(1rem)) or (-webkit-backdrop-filter: blur(1rem))) {
+  :where(html[data-experience="production"]) .portfolio-account .bottom-action,
+  :where(html[data-experience="production"]) .portfolio-account .action-sheet {
+    background-color: #f7f8fa;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .portfolio-toast {
+    background-color: #17191f;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :where(html[data-experience="production"]) .portfolio-account .bottom-action,
+  :where(html[data-experience="production"]) .portfolio-account .portfolio-toast,
+  :where(html[data-experience="production"]) .portfolio-account .action-sheet,
+  :where(html[data-experience="production"]) .portfolio-account .action-sheet-backdrop {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .bottom-action,
+  :where(html[data-experience="production"]) .portfolio-account .action-sheet {
+    background: #f7f8fa;
+  }
+}
+
+@media (max-width: 360px) {
+  :where(html[data-experience="production"]) .portfolio-account {
+    --portfolio-horizontal-pad: 15px;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .portfolio-header h1 {
+    font-size: 1.1875rem;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .currency-mode-switch button {
+    min-width: 2.82rem;
+    padding-inline: 0.42rem;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .portfolio-more-button {
+    min-width: 3rem;
+    padding-inline: 0.58rem;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .account-summary__value {
+    font-size: clamp(1.75rem, 12.5vw, 2.65rem);
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .account-summary__metric-value strong,
+  :where(html[data-experience="production"]) .portfolio-account .account-summary__daily-pnl strong {
+    font-size: clamp(0.75rem, 4.5vw, 1.05rem);
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .section-heading__title {
+    display: grid;
+    gap: 0.08rem;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .position-table {
+    --position-identity-width: 6.5rem;
+  }
+}
+
+@media (min-width: 720px) {
+  :where(html[data-experience="production"]) body:has(.portfolio-account) {
+    padding-block: 1.25rem;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account {
+    min-height: calc(100dvh - 2.5rem);
+    overflow: hidden;
+    border: 1px solid rgb(17 18 23 / 8%);
+    border-radius: 1.5rem;
+    box-shadow: 0 2.4rem 6rem rgb(17 18 23 / 14%);
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .portfolio-header {
+    border-radius: 1.5rem 1.5rem 0 0;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .bottom-action {
+    right: 50%;
+    left: auto;
+    width: min(60rem, 100%);
+    transform: translateX(50%);
+    border-right: 1px solid rgb(17 18 23 / 7%);
+    border-left: 1px solid rgb(17 18 23 / 7%);
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .action-sheet {
+    border-radius: 1.4rem;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account {
+    --portfolio-horizontal-pad: 2rem;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .account-summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .account-summary__primary {
+    grid-column: 1;
+    padding-top: 1.25rem;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .portfolio-trend {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    height: 100%;
+    min-height: 15rem;
+    align-self: stretch;
+    padding-top: 3rem;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .portfolio-trend__plot {
+    height: 13rem;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .portfolio-trend__readout {
+    top: 1.5rem;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .account-summary__metrics {
+    grid-column: 1;
+    margin-top: 1.5rem;
+    border-top: 0;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .portfolio-status-strip {
+    grid-column: 1 / -1;
+    margin-top: 0.5rem;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .portfolio-ai-entry {
+    padding-inline: 25%;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .position-table__visual-hint {
+    display: none;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .position-table::after {
+    display: none;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .position-row {
+    min-height: 4.75rem;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .position-table {
+    --position-identity-width: 10rem;
+  }
+
+  :where(html[data-experience="production"]) .precision-form {
+    margin-block: 1.5rem;
+    border: 1px solid var(--ledger-line);
+    border-radius: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(html[data-experience="production"]) .portfolio-account *,
+  :where(html[data-experience="production"]) .portfolio-account *::before,
+  :where(html[data-experience="production"]) .portfolio-account *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :where(html[data-experience="production"]) .portfolio-account {
+    --portfolio-muted: #4f535c;
+    --portfolio-line: #cfd2d8;
+  }
+
+  :where(html[data-experience="production"]) .portfolio-account .position-row,
+  :where(html[data-experience="production"]) .portfolio-account .position-table__header,
+  :where(html[data-experience="production"]) .portfolio-account .portfolio-ai-entry {
+    border-color: #bfc3cb;
+  }
+}
+
+@media (forced-colors: active) {
+  :where(html[data-experience="production"]) .portfolio-account .account-summary,
+  :where(html[data-experience="production"]) .portfolio-account .portfolio-header,
+  :where(html[data-experience="production"]) .portfolio-account .positions-section,
+  :where(html[data-experience="production"]) .portfolio-account .bottom-action__button {
+    forced-color-adjust: auto;
+  }
+}
+
+@keyframes ledger-skeleton {
+  from {
+    background-position: 180% 0, 0 0;
+  }
+
+  to {
+    background-position: -120% 0, 0 0;
+  }
+}
+
+:where(html[data-experience="production"]) .portfolio-workspace,
+:where(html[data-experience="production"]) .portfolio-overview-column,
+:where(html[data-experience="production"]) .portfolio-ledger-column { display: contents; }

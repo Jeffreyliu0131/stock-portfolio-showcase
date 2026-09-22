@@ -1,0 +1,13 @@
+{
+  "kind": "BUFFETT_RESEARCH_SYNTHETIC_EVAL",
+  "generatedAt": "2026-08-28",
+  "sourceState": "UNCOMMITTED_WORKING_TREE",
+  "caseCount": 9,
+  "passed": 9,
+  "failed": 0,
+  "networkCalls": 0,
+  "liveSecRecords": 0,
+  "liveOpenAiResponses": 0,
+  "realPortfolioRecords": 0,
+  "status": "PASS_SYNTHETIC_ONLY"
+}

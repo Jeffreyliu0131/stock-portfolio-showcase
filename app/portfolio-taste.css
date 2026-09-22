@@ -1,0 +1,1161 @@
+/*
+ * Cold Ledger presentation layer.
+ * Shape rule: 24px workspace panels, 16px modules, 12px controls.
+ * Cobalt is the only interaction accent. Red and green are semantic P/L colors.
+ */
+
+:root[data-experience="research"] {
+  --ledger-canvas: #e9edf2;
+  --ledger-surface: #f8f9fb;
+  --ledger-surface-raised: #fcfdff;
+  --ledger-surface-muted: #f0f2f5;
+  --ledger-ink: #15181d;
+  --ledger-ink-soft: #626a76;
+  --ledger-ink-faint: #8b929d;
+  --ledger-line: rgb(21 24 29 / 9%);
+  --ledger-line-strong: rgb(21 24 29 / 16%);
+  --ledger-accent: #2f63d8;
+  --ledger-accent-strong: #244da9;
+  --ledger-accent-soft: #e9effc;
+  --ledger-graphite: #11151b;
+  --ledger-graphite-soft: #181d25;
+  --ledger-graphite-raised: #202630;
+  --ledger-graphite-line: rgb(255 255 255 / 10%);
+  --ledger-graphite-text: #f2f5f8;
+  --ledger-graphite-muted: #9ba5b3;
+  --ledger-gain: #c43e4b;
+  --ledger-gain-dark: #ff7581;
+  --ledger-loss: #0a7c5d;
+  --ledger-loss-dark: #50d4a2;
+  --ledger-shadow: 0 1.5rem 4rem rgb(38 48 62 / 12%);
+}
+
+html[data-experience="research"] {
+  background: var(--ledger-canvas);
+}
+
+:where(html[data-experience="research"]) body:has(.portfolio-account) {
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 50% -12rem, rgb(47 99 216 / 9%), transparent 34rem),
+    var(--ledger-canvas);
+  color: var(--ledger-ink);
+}
+
+:where(html[data-experience="research"]) .portfolio-account {
+  --portfolio-horizontal-pad: clamp(1rem, 3vw, 1.5rem);
+  --portfolio-chart-gain: var(--ledger-gain-dark);
+  --portfolio-chart-loss: var(--ledger-loss-dark);
+  --portfolio-chart-neutral: #96a0ae;
+  --portfolio-chart-grid: rgb(255 255 255 / 9%);
+  --portfolio-chart-cursor: rgb(255 255 255 / 54%);
+  --position-identity-width: 8.25rem;
+  --position-table-min-width: 40rem;
+  position: relative;
+  isolation: isolate;
+  width: min(calc(100% - 2rem), 76rem);
+  min-height: calc(100dvh - 2rem);
+  padding: 0 0 1.25rem;
+  margin: 1rem auto;
+  overflow: visible;
+  border: 1px solid rgb(255 255 255 / 72%);
+  border-radius: 1.5rem;
+  background: color-mix(in srgb, var(--ledger-surface) 94%, transparent);
+  box-shadow: var(--ledger-shadow);
+  color: var(--ledger-ink);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+    "Helvetica Neue", Arial, sans-serif;
+  container-type: inline-size;
+}
+
+:where(html[data-experience="research"]) .portfolio-account :where(button, a, [role="button"], [tabindex]):focus-visible {
+  outline: 3px solid rgb(47 99 216 / 30%);
+  outline-offset: 2px;
+}
+
+:where(html[data-experience="research"]) .portfolio-account :where(button, a, [role="button"]):active {
+  transform: scale(0.985);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-header {
+  display: flex;
+  min-height: 4.8rem;
+  align-items: center;
+  justify-content: space-between;
+  padding:
+    max(0.75rem, env(safe-area-inset-top))
+    var(--portfolio-horizontal-pad)
+    0.7rem;
+  border: 0;
+  border-bottom: 1px solid var(--ledger-line);
+  border-radius: 1.5rem 1.5rem 0 0;
+  background: color-mix(in srgb, var(--ledger-surface-raised) 91%, transparent);
+  gap: 1rem;
+  backdrop-filter: blur(1rem) saturate(120%);
+  -webkit-backdrop-filter: blur(1rem) saturate(120%);
+}
+
+:where(html[data-experience="research"]) .portfolio-header__title {
+  min-width: 0;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-header h1 {
+  color: var(--ledger-ink);
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  font-weight: 760;
+  letter-spacing: -0.055em;
+  line-height: 1;
+}
+
+:where(html[data-experience="research"]) .portfolio-header__title p {
+  margin-top: 0.34rem;
+  color: var(--ledger-ink-faint);
+  font-size: 0.66rem;
+  font-weight: 620;
+  letter-spacing: 0.02em;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-header__controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .currency-mode-switch {
+  display: grid;
+  min-height: 2.8rem;
+  padding: 0.16rem;
+  border: 1px solid var(--ledger-line-strong);
+  border-radius: 0.75rem;
+  background: var(--ledger-surface-muted);
+  box-shadow: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+:where(html[data-experience="research"]) .portfolio-account .currency-mode-switch button {
+  min-width: 3rem;
+  min-height: 44px;
+  padding: 0.3rem 0.55rem;
+  border: 0;
+  border-radius: 0.6rem;
+  background: transparent;
+  color: var(--ledger-ink-faint);
+  font-size: 0.72rem;
+  font-weight: 690;
+  transition: background-color 150ms ease, color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .currency-mode-switch button[aria-pressed="true"] {
+  background: var(--ledger-surface-raised);
+  color: var(--ledger-ink);
+  box-shadow: 0 0.2rem 0.65rem rgb(25 32 42 / 9%);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .currency-mode-switch button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-more-button {
+  min-width: 3.2rem;
+  min-height: 2.8rem;
+  padding: 0 0.7rem;
+  border: 1px solid var(--ledger-line-strong);
+  border-radius: 0.75rem;
+  background: var(--ledger-surface-raised);
+  color: var(--ledger-ink-soft);
+  font-size: 0.72rem;
+  font-weight: 690;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, transform 150ms ease;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-more-button:hover,
+:where(html[data-experience="research"]) .portfolio-account .portfolio-more-button[aria-expanded="true"] {
+  border-color: color-mix(in srgb, var(--ledger-accent) 45%, var(--ledger-line));
+  background: var(--ledger-accent-soft);
+  color: var(--ledger-accent-strong);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .fx-rate-status {
+  padding: 0.65rem var(--portfolio-horizontal-pad);
+  border: 0;
+  border-bottom: 1px solid var(--ledger-line);
+  background: var(--ledger-accent-soft);
+  color: var(--ledger-accent-strong);
+  font-size: 0.72rem;
+}
+
+:where(html[data-experience="research"]) .portfolio-workspace {
+  display: grid;
+  align-items: start;
+  padding: 1.25rem;
+  gap: 1.25rem;
+  grid-template-columns: minmax(22rem, 0.82fr) minmax(31rem, 1.18fr);
+}
+
+:where(html[data-experience="research"]) .portfolio-overview-column,
+:where(html[data-experience="research"]) .portfolio-ledger-column {
+  min-width: 0;
+}
+
+:where(html[data-experience="research"]) .portfolio-overview-column {
+  display: grid;
+  align-content: start;
+  gap: 0.9rem;
+}
+
+:where(html[data-experience="research"]) .portfolio-ledger-column {
+  overflow: hidden;
+  border: 1px solid var(--ledger-line);
+  border-radius: 1.5rem;
+  background: var(--ledger-surface-raised);
+  box-shadow: 0 0.8rem 2.4rem rgb(38 48 62 / 7%);
+}
+
+/* One graphite instrument panel, without multi-color aurora decoration. */
+:where(html[data-experience="research"]) .portfolio-account .account-summary {
+  position: relative;
+  overflow: hidden;
+  padding: 0 0 1rem;
+  margin: 0;
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(circle at 88% 7%, rgb(47 99 216 / 18%), transparent 14rem),
+    linear-gradient(145deg, var(--ledger-graphite-soft), var(--ledger-graphite) 64%);
+  box-shadow: 0 1.4rem 3rem rgb(17 21 27 / 20%);
+  color: var(--ledger-graphite-text);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary::after {
+  position: absolute;
+  width: 13rem;
+  height: 13rem;
+  border: 2.8rem solid rgb(255 255 255 / 2.5%);
+  border-radius: 50%;
+  content: "";
+  inset: auto -6rem -6rem auto;
+  pointer-events: none;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary > * {
+  position: relative;
+  z-index: 1;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__primary {
+  padding: 1.35rem var(--portfolio-horizontal-pad) 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__label {
+  color: var(--ledger-graphite-muted);
+  font-size: 0.72rem;
+  font-weight: 580;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__label-row > span {
+  display: inline-flex;
+  min-width: 2.75rem;
+  min-height: 1.45rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--ledger-graphite-line);
+  border-radius: 0.6rem;
+  background: rgb(255 255 255 / 4%);
+  color: #c5ccd6;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__value {
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 0.35rem;
+  overflow: visible;
+  color: var(--ledger-graphite-text);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC",
+    "Helvetica Neue", sans-serif;
+  font-size: clamp(2.7rem, 7vw, 4.25rem);
+  font-weight: 600;
+  letter-spacing: -0.07em;
+  line-height: 1;
+  overflow-wrap: normal;
+  white-space: nowrap;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__headline-change {
+  display: inline-flex;
+  min-height: 1.75rem;
+  align-items: center;
+  padding: 0.28rem 0.52rem;
+  margin-top: 0.55rem;
+  border: 1px solid var(--ledger-graphite-line);
+  border-radius: 0.65rem;
+  background: rgb(255 255 255 / 4%);
+  gap: 0.38rem;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__headline-change strong,
+:where(html[data-experience="research"]) .portfolio-account .account-summary__headline-change span {
+  font-size: 0.8rem;
+  font-weight: 680;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__headline-change small {
+  color: var(--ledger-graphite-muted);
+  font-size: 0.62rem;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__pnl--positive,
+:where(html[data-experience="research"]) .portfolio-account .position-cell__primary--positive,
+:where(html[data-experience="research"]) .portfolio-account .position-cell__secondary--positive {
+  color: var(--ledger-gain-dark);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__pnl--negative,
+:where(html[data-experience="research"]) .portfolio-account .position-cell__primary--negative,
+:where(html[data-experience="research"]) .portfolio-account .position-cell__secondary--negative {
+  color: var(--ledger-loss-dark);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__pnl--neutral {
+  color: var(--ledger-graphite-muted);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-trend {
+  position: relative;
+  min-height: 9.4rem;
+  padding: 0.45rem 0 0;
+  background: transparent;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-trend__readout {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  color: var(--ledger-graphite-muted);
+  inset: 0.45rem var(--portfolio-horizontal-pad) auto;
+  pointer-events: none;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-trend__readout > span,
+:where(html[data-experience="research"]) .portfolio-account .portfolio-trend__readout small {
+  color: var(--ledger-graphite-muted);
+  font-size: 0.61rem;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-trend__readout > strong {
+  color: var(--ledger-graphite-text);
+  font-size: 0.7rem;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-trend__plot {
+  width: calc(100% - (var(--portfolio-horizontal-pad) * 2));
+  height: 9.4rem;
+  margin-inline: var(--portfolio-horizontal-pad);
+  outline: 0;
+  touch-action: pan-y;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-trend__plot:focus-visible {
+  outline: 2px solid rgb(91 139 244 / 70%);
+  outline-offset: -3px;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-trend__overnight-note,
+:where(html[data-experience="research"]) .portfolio-account .portfolio-trend__empty,
+:where(html[data-experience="research"]) .portfolio-account .portfolio-trend--empty span {
+  color: var(--ledger-graphite-muted);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__trend-meta {
+  padding: 0.35rem var(--portfolio-horizontal-pad) 0.75rem;
+  color: var(--ledger-graphite-muted);
+  font-size: 0.62rem;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__metrics {
+  display: grid;
+  padding: 0 var(--portfolio-horizontal-pad);
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--ledger-graphite-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__metrics .account-summary__metric,
+:where(html[data-experience="research"]) .portfolio-account .account-summary__metrics .account-summary__metric:nth-child(3n + 1),
+:where(html[data-experience="research"]) .portfolio-account .account-summary__metrics .account-summary__metric:nth-child(2),
+:where(html[data-experience="research"]) .portfolio-account .account-summary__metrics .account-summary__metric:nth-child(3) {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  min-height: 5.1rem;
+  align-content: center;
+  padding: 0.9rem 1rem;
+  border: 0;
+  border-top: 1px solid var(--ledger-graphite-line);
+  border-left: 1px solid var(--ledger-graphite-line);
+  background: transparent;
+  gap: 0.2rem;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__metrics .account-summary__metric:nth-child(-n + 2) {
+  border-top: 0;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__metrics .account-summary__metric:nth-child(odd) {
+  padding-left: 0;
+  border-left: 0;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__metrics .account-summary__metric:nth-child(even) {
+  padding-right: 0;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__metrics dt {
+  overflow: hidden;
+  color: var(--ledger-graphite-muted);
+  font-size: 0.65rem;
+  font-weight: 570;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__metric-value,
+:where(html[data-experience="research"]) .portfolio-account .account-summary__daily-pnl {
+  display: grid;
+  min-width: 0;
+  color: var(--ledger-graphite-text);
+  gap: 0.14rem;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__metric-value strong,
+:where(html[data-experience="research"]) .portfolio-account .account-summary__daily-pnl strong {
+  overflow: hidden;
+  color: inherit;
+  font-size: clamp(0.88rem, 2.4vw, 1.05rem);
+  font-weight: 690;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__metric-value span,
+:where(html[data-experience="research"]) .portfolio-account .account-summary__daily-pnl span {
+  overflow: hidden;
+  color: var(--ledger-graphite-muted);
+  font-size: 0.61rem;
+  font-weight: 550;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary__metric--cost .account-summary__metric-value,
+:where(html[data-experience="research"]) .portfolio-account .account-summary__metric--cash .account-summary__metric-value {
+  color: var(--ledger-graphite-text);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-status-strip {
+  display: block;
+  padding: 0.75rem var(--portfolio-horizontal-pad) 0;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--ledger-graphite-line);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ledger-graphite-muted);
+  font-size: 0.62rem;
+  line-height: 1.5;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-status-strip::before {
+  display: none;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .inline-notice {
+  padding: 0.75rem 0.85rem;
+  margin: 0;
+  border: 1px solid color-mix(in srgb, var(--ledger-accent) 24%, transparent);
+  border-radius: 0.9rem;
+  background: var(--ledger-accent-soft);
+  color: var(--ledger-accent-strong);
+  font-size: 0.72rem;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-ai-entry {
+  display: grid;
+  padding: 0;
+  background: transparent;
+  gap: 0.55rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-ai-entry__button {
+  width: 100%;
+  min-height: 3.15rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--ledger-line-strong);
+  border-radius: 0.85rem;
+  background: var(--ledger-surface-raised);
+  color: var(--ledger-ink);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 710;
+  text-align: left;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, transform 150ms ease;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-ai-entry__button:hover {
+  border-color: color-mix(in srgb, var(--ledger-accent) 40%, var(--ledger-line));
+  background: var(--ledger-accent-soft);
+  color: var(--ledger-accent-strong);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-ai-entry__button--chat {
+  border-color: var(--ledger-ink);
+  background: var(--ledger-ink);
+  color: var(--ledger-surface-raised);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-ai-entry__button--chat:hover {
+  border-color: var(--ledger-accent-strong);
+  background: var(--ledger-accent-strong);
+  color: #f6f9ff;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-ai-entry__button--research {
+  border-color: color-mix(in srgb, var(--ledger-accent) 34%, var(--ledger-line));
+  background: var(--ledger-accent-soft);
+  color: var(--ledger-accent-strong);
+  grid-column: 1 / -1;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-ai-entry__button--research:hover {
+  border-color: var(--ledger-accent);
+  background: color-mix(in srgb, var(--ledger-accent-soft) 78%, var(--ledger-surface-raised));
+}
+
+:where(html[data-experience="research"]) .portfolio-account .positions-section {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .section-heading {
+  position: static;
+  display: flex;
+  width: auto;
+  height: auto;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 1.2rem 1.15rem 0.9rem;
+  margin: 0;
+  overflow: visible;
+  border: 0;
+  clip: auto;
+  gap: 1rem;
+  white-space: normal;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .section-heading__title {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .section-heading h2 {
+  color: var(--ledger-ink);
+  font-size: 1.12rem;
+  font-weight: 760;
+  letter-spacing: -0.04em;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .section-heading__count,
+:where(html[data-experience="research"]) .portfolio-account .section-heading__metric {
+  color: var(--ledger-ink-faint);
+  font-size: 0.64rem;
+  font-weight: 560;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .section-heading__metric {
+  display: block;
+  flex: 0 0 auto;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-table {
+  --position-identity-width: 8.25rem;
+  --position-table-min-width: 40rem;
+  overflow: hidden;
+  border: 0;
+  border-top: 1px solid var(--ledger-line);
+  border-radius: 0;
+  background: var(--ledger-surface-raised);
+  box-shadow: none;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-table__visual-hint {
+  display: none;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-table__scroller {
+  overscroll-behavior-x: contain;
+  scrollbar-color: color-mix(in srgb, var(--ledger-accent) 34%, transparent) transparent;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-table__scroller::-webkit-scrollbar {
+  height: 0.35rem;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-table__scroller::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ledger-accent) 34%, transparent);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-table__header,
+:where(html[data-experience="research"]) .portfolio-account .position-row {
+  min-width: var(--position-table-min-width);
+  padding-right: 0;
+  padding-left: 0;
+  column-gap: 0.45rem;
+  grid-template-columns:
+    var(--position-identity-width)
+    repeat(4, minmax(7.15rem, 1fr));
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-table__header {
+  min-height: 2.55rem;
+  padding-top: 0.48rem;
+  padding-bottom: 0.48rem;
+  border: 0;
+  border-bottom: 1px solid var(--ledger-line);
+  background: var(--ledger-surface-muted);
+  color: var(--ledger-ink-faint);
+  font-size: 0.61rem;
+  font-weight: 620;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-table__header > span:first-child {
+  padding-right: 0.4rem;
+  padding-left: 1.15rem;
+  background: var(--ledger-surface-muted);
+  box-shadow: 1px 0 0 var(--ledger-line);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-table__header > span:last-child,
+:where(html[data-experience="research"]) .portfolio-account .position-row > .position-cell:last-child {
+  padding-right: 1.1rem;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-row {
+  --position-row-background: var(--ledger-surface-raised);
+  min-height: 5rem;
+  padding-top: 0.78rem;
+  padding-bottom: 0.78rem;
+  border: 0;
+  background: var(--position-row-background);
+  transition: background-color 150ms ease, transform 150ms ease;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-row + .position-row {
+  border-top: 1px solid var(--ledger-line);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-row:hover,
+:where(html[data-experience="research"]) .portfolio-account .position-row--pressed {
+  --position-row-background: var(--ledger-accent-soft);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-row--pressed {
+  transform: scale(0.996);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-cell {
+  min-width: 0;
+  gap: 0.28rem;
+  line-height: 1.15;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-cell--identity {
+  position: sticky;
+  z-index: 2;
+  left: 0;
+  padding-right: 0.45rem;
+  padding-left: 1.15rem;
+  background: var(--position-row-background);
+  box-shadow: 1px 0 0 var(--ledger-line);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-cell--identity::before {
+  display: none;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-cell--identity strong {
+  overflow: hidden;
+  color: var(--ledger-ink);
+  font-size: 0.78rem;
+  font-weight: 730;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-cell--identity span,
+:where(html[data-experience="research"]) .portfolio-account .position-cell__secondary {
+  overflow: hidden;
+  color: var(--ledger-ink-faint);
+  font-size: 0.62rem;
+  font-weight: 540;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-cell--numeric {
+  align-items: flex-end;
+  text-align: right;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-cell__primary {
+  overflow: hidden;
+  color: var(--ledger-ink);
+  font-size: 0.75rem;
+  font-weight: 690;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-cell__primary--positive,
+:where(html[data-experience="research"]) .portfolio-account .position-cell__secondary--positive {
+  color: var(--ledger-gain);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-cell__primary--negative,
+:where(html[data-experience="research"]) .portfolio-account .position-cell__secondary--negative {
+  color: var(--ledger-loss);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .position-cell--daily .position-cell__primary--positive,
+:where(html[data-experience="research"]) .portfolio-account .position-cell--daily .position-cell__primary--negative {
+  display: inline-flex;
+  min-height: 1.5rem;
+  align-items: center;
+  padding: 0.16rem 0.4rem;
+  border-radius: 0.55rem;
+  background: color-mix(in srgb, currentColor 9%, transparent);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .cash-row,
+:where(html[data-experience="research"]) .portfolio-account .cash-row--empty {
+  --position-row-background: #fbfcfd;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .cash-row:hover,
+:where(html[data-experience="research"]) .portfolio-account .cash-row--empty:hover {
+  --position-row-background: var(--ledger-accent-soft);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .cash-cell__label {
+  display: block;
+  color: var(--ledger-ink-faint);
+  font-size: 0.59rem;
+  font-weight: 600;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .cash-row__action {
+  color: var(--ledger-accent-strong);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .page-disclosures {
+  display: block;
+  padding: 0.85rem 1.15rem 1.15rem;
+  margin: 0;
+  border-top: 1px solid var(--ledger-line);
+  background: var(--ledger-surface-muted);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .data-note {
+  max-width: none;
+  margin: 0;
+  color: var(--ledger-ink-faint);
+  font-size: 0.62rem;
+  line-height: 1.55;
+  text-align: left;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .data-note + .data-note {
+  margin-top: 0.35rem;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .page-disclosures a {
+  color: var(--ledger-accent-strong);
+  text-decoration-color: color-mix(in srgb, var(--ledger-accent) 35%, transparent);
+  text-underline-offset: 0.15em;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .bottom-action {
+  position: sticky;
+  z-index: 8;
+  right: auto;
+  bottom: 1rem;
+  left: auto;
+  width: 100%;
+  padding: 0;
+  margin-top: 0.05rem;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  pointer-events: none;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .bottom-action__inner {
+  display: block;
+  width: 100%;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .bottom-action__button {
+  width: 100%;
+  min-height: 3.25rem;
+  border: 1px solid var(--ledger-accent-strong);
+  border-radius: 0.9rem;
+  background: var(--ledger-accent-strong);
+  box-shadow: 0 0.7rem 1.6rem rgb(36 77 169 / 18%);
+  color: #f7f9ff;
+  font-size: 0.9rem;
+  font-weight: 730;
+  pointer-events: auto;
+  transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+
+:where(html[data-experience="research"]) .portfolio-account .bottom-action__button:hover {
+  border-color: var(--ledger-accent);
+  background: var(--ledger-accent);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-toast {
+  border: 1px solid var(--ledger-line-strong);
+  border-radius: 0.85rem;
+  background: color-mix(in srgb, var(--ledger-surface-raised) 94%, transparent);
+  box-shadow: 0 1rem 2.5rem rgb(21 24 29 / 18%);
+  color: var(--ledger-ink);
+  backdrop-filter: blur(1rem);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .portfolio-toast__mark {
+  background: var(--ledger-accent-soft);
+  color: var(--ledger-accent-strong);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .action-sheet-backdrop {
+  background: rgb(15 18 23 / 50%);
+  backdrop-filter: blur(0.22rem);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .action-sheet {
+  border: 1px solid var(--ledger-line-strong);
+  border-radius: 1.25rem;
+  background: var(--ledger-surface);
+  box-shadow: 0 1.5rem 4rem rgb(15 18 23 / 28%);
+  color: var(--ledger-ink);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .action-sheet__heading h2,
+:where(html[data-experience="research"]) .portfolio-account .action-sheet__button,
+:where(html[data-experience="research"]) .portfolio-account .action-sheet__cancel {
+  color: var(--ledger-ink);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .action-sheet__heading p,
+:where(html[data-experience="research"]) .portfolio-account .action-sheet__description,
+:where(html[data-experience="research"]) .portfolio-account .action-sheet__button span {
+  color: var(--ledger-ink-soft);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .action-sheet__button,
+:where(html[data-experience="research"]) .portfolio-account .action-sheet__cancel {
+  background: var(--ledger-surface-raised);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .empty-account,
+:where(html[data-experience="research"]) .portfolio-account .state-card.account-error {
+  border: 0;
+  background: var(--ledger-surface-raised);
+  color: var(--ledger-ink);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .empty-account__eyebrow,
+:where(html[data-experience="research"]) .portfolio-account .empty-account__meta,
+:where(html[data-experience="research"]) .portfolio-account .state-card.account-error .eyebrow {
+  color: var(--ledger-accent-strong);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .empty-account h2,
+:where(html[data-experience="research"]) .portfolio-account .state-card.account-error h1 {
+  color: var(--ledger-ink);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .empty-account p,
+:where(html[data-experience="research"]) .portfolio-account .state-card.account-error p {
+  color: var(--ledger-ink-soft);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .account-summary--skeleton,
+:where(html[data-experience="research"]) .portfolio-account .portfolio-header--skeleton {
+  border-color: var(--ledger-line);
+  background: var(--ledger-surface-raised);
+}
+
+:where(html[data-experience="research"]) .portfolio-account .skeleton {
+  background: linear-gradient(90deg, var(--ledger-surface-muted), var(--ledger-surface-raised), var(--ledger-surface-muted));
+  background-size: 200% 100%;
+}
+
+@media (max-width: 63.99rem) {
+  :where(html[data-experience="research"]) .portfolio-account {
+    width: min(calc(100% - 1rem), 46rem);
+    padding-bottom: calc(6.6rem + env(safe-area-inset-bottom));
+    margin: 0.5rem auto;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-workspace {
+    display: block;
+    padding: 0;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-overview-column {
+    display: block;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .account-summary {
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0 0 1.5rem 1.5rem;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .inline-notice {
+    margin: 0.75rem 1rem 0;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .portfolio-ai-entry {
+    padding: 0.75rem 1rem 0;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-ledger-column {
+    margin-top: 0.8rem;
+    border-right: 0;
+    border-left: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .bottom-action {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    padding:
+      0.6rem
+      max(1rem, env(safe-area-inset-right))
+      max(0.6rem, env(safe-area-inset-bottom))
+      max(1rem, env(safe-area-inset-left));
+    margin: 0;
+    border-top: 1px solid var(--ledger-line);
+    background: color-mix(in srgb, var(--ledger-surface-raised) 92%, transparent);
+    box-shadow: 0 -0.5rem 1.4rem rgb(21 24 29 / 7%);
+    backdrop-filter: blur(1rem);
+    -webkit-backdrop-filter: blur(1rem);
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .bottom-action__inner {
+    width: min(100%, 44rem);
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 31.99rem) {
+  :where(html[data-experience="research"]) .portfolio-account {
+    width: 100%;
+    min-height: 100dvh;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .portfolio-header {
+    border-radius: 0;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-header__title p {
+    max-width: 9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .account-summary__value {
+    font-size: clamp(2.45rem, 13vw, 3.35rem);
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .portfolio-ai-entry {
+    grid-template-columns: 1fr;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .portfolio-ai-entry__button--research {
+    grid-column: auto;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .section-heading__metric {
+    display: none;
+  }
+}
+
+@media (max-width: 22rem) {
+  :where(html[data-experience="research"]) .portfolio-account .portfolio-header {
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+    gap: 0.45rem;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .portfolio-header h1 {
+    font-size: 1.35rem;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .portfolio-header__controls {
+    gap: 0.35rem;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .currency-mode-switch button {
+    min-width: 44px;
+    padding-right: 0.2rem;
+    padding-left: 0.2rem;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-experience="research"] {
+    --ledger-canvas: #0f1217;
+    --ledger-surface: #14181f;
+    --ledger-surface-raised: #1a1f27;
+    --ledger-surface-muted: #202630;
+    --ledger-ink: #edf1f6;
+    --ledger-ink-soft: #b3bcc8;
+    --ledger-ink-faint: #87919f;
+    --ledger-line: rgb(237 241 246 / 9%);
+    --ledger-line-strong: rgb(237 241 246 / 16%);
+    --ledger-accent: #6e97f0;
+    --ledger-accent-strong: #9bb9f8;
+    --ledger-accent-soft: #202e4a;
+    --ledger-graphite: #0c0f14;
+    --ledger-graphite-soft: #121720;
+    --ledger-graphite-raised: #1a202a;
+    --ledger-shadow: 0 1.5rem 4rem rgb(0 0 0 / 30%);
+  }
+
+  :where(html[data-experience="research"]) body:has(.portfolio-account) {
+    background:
+      radial-gradient(circle at 50% -12rem, rgb(110 151 240 / 7%), transparent 34rem),
+      var(--ledger-canvas);
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account {
+    border-color: var(--ledger-line);
+    background: var(--ledger-surface);
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .portfolio-header {
+    background: color-mix(in srgb, var(--ledger-surface-raised) 92%, transparent);
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .currency-mode-switch button[aria-pressed="true"] {
+    background: #2a313d;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .portfolio-ai-entry__button--chat {
+    border-color: #e1e7ef;
+    background: #e1e7ef;
+    color: #171c23;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .cash-row,
+  :where(html[data-experience="research"]) .portfolio-account .cash-row--empty {
+    --position-row-background: #181e26;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .bottom-action__button {
+    border-color: #dce6fb;
+    background: #dce6fb;
+    color: #182033;
+    box-shadow: none;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .bottom-action__button:hover {
+    border-color: #cbd9f7;
+    background: #cbd9f7;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .action-sheet__button--danger,
+  :where(html[data-experience="research"]) .portfolio-account .action-sheet__button--danger strong {
+    color: #ff9aa4;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :where(html[data-experience="research"]) .portfolio-account .account-summary,
+  :where(html[data-experience="research"]) .portfolio-account .portfolio-ledger-column {
+    animation: ledger-enter 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  :where(html[data-experience="research"]) .portfolio-account .portfolio-ledger-column {
+    animation-delay: 80ms;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(html[data-experience="research"]) .portfolio-account *,
+  :where(html[data-experience="research"]) .portfolio-account *::before,
+  :where(html[data-experience="research"]) .portfolio-account *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes ledger-enter {
+  from { opacity: 0; transform: translateY(0.7rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* The primary job is understanding the current portfolio; research is secondary. */
+:where(html[data-experience="research"]) .portfolio-account .portfolio-ai-entry__context { grid-column: 1 / -1; margin: 0 0 0.3rem; color: var(--ledger-ink); font-size: 0.82rem; line-height: 1.6; }
+:where(html[data-experience="research"]) .portfolio-account .portfolio-ai-entry__button--primary { grid-column: 1 / -1; background: var(--ledger-ink); color: var(--ledger-surface-raised); }
+:where(html[data-experience="research"]) .portfolio-account .portfolio-ai-entry__button--chat,
+:where(html[data-experience="research"]) .portfolio-account .portfolio-ai-entry__button--research { grid-column: auto; background: var(--ledger-surface-raised); color: var(--ledger-ink); border-color: var(--ledger-line-strong); }
