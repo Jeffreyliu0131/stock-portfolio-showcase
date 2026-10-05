@@ -66,7 +66,7 @@ For local dual-target validation without real deployment wiring:
 
 ```sh
 npm run verify
-npm audit --audit-level=high
+npm run audit:security
 npm run build:ci
 npm run bundle:check
 npm run smoke:built
@@ -110,9 +110,9 @@ installation source SHA + content fingerprint
 1. From clean committed installation source, run `node scripts/sites-source-map.mjs export <empty-private-staging-directory>`. The exporter runs the public audit, copies source files, and records per-file hashes/SHA/fingerprint in `.publication/source-map.json`. It rejects dirty/changing source or a nonempty destination and changes no remote.
 2. Use a clean checkout of your configured private publication branch. Review a diff that installs exactly the exported files and removes obsolete tracked source. Preserve `.git`, ignored credentials/caches, and your hosting overlay. Do not merge private Git ancestry into public source.
 3. Only `.publication/source-map.json` and `.openai/hosting.json` may be tracked outside the canonical file set. The overlay has exactly `{ project_id, d1: "DB", r2: null }`, with two-space JSON indentation and a terminal newline. For subsequent releases, preserve that installation's project and binding.
-4. Compare the mirrored map byte-for-byte with the fresh export; never edit hashes to bless drift. Stage the ignored map explicitly with `git add -f .publication/source-map.json`. Commit only an authorized reviewed diff with the intended repository-local identity.
+4. Compare the mirrored map byte-for-byte with the fresh export; never edit hashes to bless drift. Stage the ignored map explicitly with `git add -f .publication/source-map.json`. Commit only the reviewed maintenance diff with the intended repository-local identity.
 5. In that clean committed mirror run `node scripts/sites-source-map.mjs verify`, `npm ci`, relevant verification, `npm run build:sites`, `npm run bundle:check`, and `npm run release:check -- sites`. Its build SHA is the actual mirror commit; do not substitute the canonical commit identity for an artifact built elsewhere.
-6. Push the configured publication branch under explicit authorization. Coordinate automatic deployment settings when manually verifying a release. Confirm the actual remote configured-branch HEAD equals build `sourceSha`; recheck connector constraints rather than assume arbitrary branch/commit selection exists.
+6. Push the configured publication branch after the release checks pass. Coordinate automatic deployment settings when manually verifying a release. Confirm the actual remote configured-branch HEAD equals build `sourceSha`; recheck connector constraints rather than assume arbitrary branch/commit selection exists.
 7. Package from that same checkout. On macOS use the Sites packager with `COPYFILE_DISABLE=1` to avoid AppleDouble files. Verify the archive below, re-run `release:check -- sites`, and save the version with the actual mirror SHA and matching archive.
 8. Deploy only to your independently owned Site and approved access policy. Privately record canonical SHA/fingerprint, actual mirror SHA, manifest digest, saved-version/deployment identifiers, acceptance, and rollback references. A pushed commit or saved version alone is not an active deployment.
 
@@ -129,7 +129,7 @@ python3 scripts/verify-sites-archive.py <archive> --normalize-to <new-normalized
 python3 scripts/verify-sites-archive.py <new-normalized-archive>
 ```
 
-The normalizer emits a separate archive without platform/owner metadata; it cannot discard unexpected files or approve changed bytes. Upload only a verified archive. Packaging alone is not authorization to publish.
+The normalizer emits a separate archive without platform/owner metadata; it cannot discard unexpected files or approve changed bytes. Upload only a verified archive. Packaging alone does not establish a successful deployment.
 
 ## Independent-installation smoke and rollback
 

@@ -9,7 +9,7 @@ Use Node.js 22 and the committed dependency lockfile:
 ```sh
 npm ci
 npm run verify
-npm audit --audit-level=high
+npm run audit:security
 npm run build:ci
 npm run bundle:check
 npm run smoke:built
@@ -20,6 +20,8 @@ npm run smoke:built
 Default `npm run build` and `npm start` select the local demo. Test the development fixture separately: `?fixture=ready` is available only under `npm run dev`, never in the compiled demo or another compiled target.
 
 For separately authorized installations in your own isolated resources, use the explicit provider/Sites build gates in [operations](09-PRODUCTION-OPERATIONS.md). These examples do not authorize changing the source of an existing service. Build targets share generated framework types, so run builds sequentially. A passing unit test does not replace a target build or artifact check.
+
+Dependency audit and verification run as independent CI jobs; either failure keeps the workflow failed. New dependency advisories therefore leave test/build results visible. The maintained [braces security backport](../vendor/braces/README.md) is covered by the release-tool suite, including actual installed resolution, malicious string/AST rejection, normal expansion and the dynamic-import build consumer. Raw registry version findings remain visible; the maintained patch is accepted only after its source and regression checks pass.
 
 ## Coverage responsibilities
 

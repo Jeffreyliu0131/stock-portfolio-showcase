@@ -33,12 +33,13 @@
     "smoke:built": "node scripts/smoke-built-targets.mjs",
     "release:check": "node scripts/release-preflight.mjs",
     "start:demo": "NEXT_PUBLIC_PORTFOLIO_TARGET=demo next start",
-    "test:release": "node --test scripts/tests/*.test.mjs"
+    "test:release": "node --test scripts/tests/*.test.mjs",
+    "audit:security": "node scripts/dependency-audit.mjs"
   },
   "dependencies": {
     "decimal.js": "10.6.0",
     "drizzle-orm": "0.45.2",
-    "next": "^16.3.5",
+    "next": "^16.3.6",
     "pdfjs-dist": "5.4.296",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
@@ -65,7 +66,8 @@
     "vinext": "1.0.0-beta.8",
     "vite": "8.2.2",
     "vitest": "4.1.11",
-    "wrangler": "4.131.1"
+    "wrangler": "4.131.1",
+    "braces": "file:vendor/braces"
   },
   "overrides": {
     "@esbuild-kit/core-utils": {
@@ -75,6 +77,9 @@
     "next": {
       "postcss": "8.5.25",
       "sharp": "0.35.4"
-    }
+    },
+    "undici@7.29.0": "7.29.1",
+    "undici@^8.0.0": "8.10.2",
+    "braces": "$braces"
   }
 }

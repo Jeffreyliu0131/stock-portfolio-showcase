@@ -70,7 +70,7 @@ Provider secrets belong only in ignored local configuration or managed server en
 
 ```sh
 npm run verify
-npm audit --audit-level=high
+npm run audit:security
 npm run build:ci
 npm run bundle:check
 npm run smoke:built

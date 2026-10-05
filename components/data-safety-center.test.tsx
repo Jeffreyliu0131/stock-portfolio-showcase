@@ -875,6 +875,7 @@ describe("storage target disclosure", () => {
     await screen.findByText(target === "provider" ? /恢复完成：1 只股票已写入当前浏览器、当前来源的本地持仓/ : /恢复完成：1 只股票已写入当前登录账号/);
     expect(repo.restoreCurrentBackup).toHaveBeenCalledTimes(1);
     if (target === "provider") expect(screen.queryByText(/其他设备使用同一账号登录后可见/)).toBeNull();
-    expect(screen.getByRole("button", { name: "生成当前数据副本" })).toBeEnabled();
+    // Modal isolation is released by an effect after the success render.
+    expect(await screen.findByRole("button", { name: "生成当前数据副本" })).toBeEnabled();
   });
 });

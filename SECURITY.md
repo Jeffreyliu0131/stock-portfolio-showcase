@@ -46,6 +46,10 @@ The issuer-research route accepts only a supported AAPL/MSFT symbol and bounded 
 
 The separate “copy and open ChatGPT” action puts selected portfolio text in a ChatGPT URL and clipboard. It is an explicit external handoff, not a local-only operation and not an automatic message send. Full prompt URLs must never enter application logs, analytics, caches, or public test evidence.
 
+## Dependency maintenance
+
+Keep the committed lockfile and the high-severity audit gate. Prefer official patched releases; do not force a framework downgrade or suppress an advisory to make CI pass. When an upstream fix is unavailable, any maintained local backport must preserve its license and provenance, document the remaining scope, and include regression tests against the actual installed consumer. The [braces backport](vendor/braces/README.md) records this temporary obligation. Raw `npm audit` continues to report the affected upstream version. `npm run audit:security` accepts only the documented remediated advisory after source-hash, development-only path, actual installation and regression verification. All other high/critical findings, source drift and incomplete/network-error audit results remain blocking. Both target builds and built smoke checks remain required. Retire the backport after an official repaired release has been reviewed and validated.
+
 ## Publication checks
 
 Run `npm run public:check`; after builds, run `npm run bundle:check`. In a full, readable checkout, run `node scripts/public-history-audit.mjs` to inspect every locally reachable ref and HEAD, including file paths/content, commit author/committer/message metadata, and annotated tags. The rules cover credential patterns, non-example contact addresses, selected identifying prose, machine paths, and deployment identifiers. Incomplete shallow history is rejected.
